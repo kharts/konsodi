@@ -6,7 +6,10 @@
 # GNU General Public License version 2 or any later version.
 
 
+import sys
+from cStringIO import StringIO
 import pyxbmct
+from common import *
 
 
 WINDOW_WIDTH = 640
@@ -15,6 +18,7 @@ WINDOW_ROWS = 12
 WINDOW_COLUMNS = 16
 COMMAND_HEIGHT = 1
 PROMPT_WIDTH = 2
+BUTTON_WIDTH = 2
 
 
 def start():
@@ -49,7 +53,6 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=WINDOW_ROWS-COMMAND_HEIGHT,
             columnspan=WINDOW_COLUMNS
         )
-        self.history_box.setText("Test text")
         self.prompt = pyxbmct.Label(">>>")
         self.placeControl(
             self.prompt,
@@ -58,11 +61,87 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=COMMAND_HEIGHT,
             columnspan=PROMPT_WIDTH
         )
-        self.command = pyxbmct.Edit()
+        self.command = pyxbmct.Edit("")
         self.placeControl(
             self.command,
             row=WINDOW_ROWS-COMMAND_HEIGHT,
             column=PROMPT_WIDTH,
             rowspan=COMMAND_HEIGHT,
-            columnspan=WINDOW_COLUMNS-PROMPT_WIDTH
+            columnspan=WINDOW_COLUMNS-PROMPT_WIDTH-BUTTON_WIDTH
         )
+        self.run_button = pyxbmct.Button("Run")
+        self.placeControl(
+            self.run_button,
+            row=WINDOW_ROWS-COMMAND_HEIGHT,
+            column=WINDOW_COLUMNS-BUTTON_WIDTH,
+            rowspan=COMMAND_HEIGHT,
+            columnspan=BUTTON_WIDTH
+        )
+        self.connect(self.run_button, self.run_command)
+        self.setFocus(self.command)
+
+    def run_command(self):
+        """
+        Run command
+        :return: None
+        """
+
+        command = self.command.getText()
+        debug("command: " + command)
+        self.add_to_history(">>> " + command)
+
+        self.set_streams()
+
+        try:
+            result = eval(command)
+        except Exception, e:
+            result = e
+
+        output = self.output.read()
+        self.add_to_history(output)
+        debug("output: " + output)
+
+        result_text = str(result)
+        self.add_to_history(result_text)
+        debug("result: " + result_text)
+
+        self.reset_streams()
+
+        self.command.setText("")
+
+    def add_to_history(self, message):
+        """
+        Add message to history
+        :param message: text of the message
+        :type message: text
+        :return: None
+        """
+
+        if self.history:
+            self.history += "\n"
+
+        self.history += message
+
+        self.history_box.setText(self.history)
+        self.history_box.scroll(len(self.history))
+
+    def set_streams(self):
+        """
+        Change standard output and error streams
+        :return: None
+        """
+
+        self.old_stdout = sys.stdout
+        self.old_sterr = sys.stderr
+        self.output = StringIO()
+        sys.stdout = self.output
+        sys.stderr = self.output
+
+    def reset_streams(self):
+        """
+        Revert back standard output and error streams
+        :return: None
+        """
+
+        sys.stdout = self.old_stdout
+        sys.stderr = self.old_sterr
