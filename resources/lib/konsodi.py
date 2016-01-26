@@ -117,6 +117,9 @@ class MainWindow(pyxbmct.AddonDialogWindow):
         :return: None
         """
 
+        if not message:
+            return
+
         if self.history:
             self.history += "\n"
 
