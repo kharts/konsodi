@@ -8,6 +8,8 @@
 
 import sys
 from cStringIO import StringIO
+import ast
+from _ast import Expr
 import pyxbmct
 from common import *
 
@@ -29,6 +31,7 @@ def start():
 
     main_window = MainWindow("Konsodi")
     main_window.doModal()
+    del main_window
 
 
 class MainWindow(pyxbmct.AddonDialogWindow):
@@ -79,6 +82,7 @@ class MainWindow(pyxbmct.AddonDialogWindow):
         )
         self.connect(self.run_button, self.run_command)
         self.setFocus(self.command)
+        self.globals = {}
 
     def run_command(self):
         """
@@ -92,18 +96,14 @@ class MainWindow(pyxbmct.AddonDialogWindow):
 
         self.set_streams()
 
-        try:
-            result = eval(command)
-        except Exception, e:
-            result = e
+        result = self.get_result(command)
 
         output = self.output.read()
         self.add_to_history(output)
         debug("output: " + output)
 
-        result_text = str(result)
-        self.add_to_history(result_text)
-        debug("result: " + result_text)
+        self.add_to_history(result)
+        debug("result: " + result)
 
         self.reset_streams()
 
@@ -148,3 +148,30 @@ class MainWindow(pyxbmct.AddonDialogWindow):
 
         sys.stdout = self.old_stdout
         sys.stderr = self.old_sterr
+
+    def get_result(self, code):
+        """
+        Get result of execution of the line of code
+        :param code: string of code
+        :type code: str
+        :return: str
+        """
+
+        try:
+            tree = ast.parse(code)
+        except Exception, e:
+            return str(e)
+        if not tree.body:
+            return ""
+        if isinstance(tree.body[0], Expr):
+            try:
+                result = eval(code, self.globals)
+            except Exception, e:
+                return str(e)
+            return str(result)
+        else:
+            try:
+                exec code in self.globals
+            except Exception, e:
+                return str(e)
+            return ""
