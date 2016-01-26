@@ -58,3 +58,11 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=COMMAND_HEIGHT,
             columnspan=PROMPT_WIDTH
         )
+        self.command = pyxbmct.Edit()
+        self.placeControl(
+            self.command,
+            row=WINDOW_ROWS-COMMAND_HEIGHT,
+            column=PROMPT_WIDTH,
+            rowspan=COMMAND_HEIGHT,
+            columnspan=WINDOW_COLUMNS-PROMPT_WIDTH
+        )
