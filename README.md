@@ -1,2 +1,2 @@
-# konsodi
+# Konsodi
 Python console for Kodi
