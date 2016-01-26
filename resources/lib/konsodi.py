@@ -13,6 +13,8 @@ WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 WINDOW_ROWS = 12
 WINDOW_COLUMNS = 16
+COMMAND_HEIGHT = 1
+PROMPT_WIDTH = 2
 
 
 def start():
@@ -38,12 +40,21 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             WINDOW_ROWS,
             WINDOW_COLUMNS
         )
-        self.history = pyxbmct.TextBox()
+        self.history = ""
+        self.history_box = pyxbmct.TextBox()
         self.placeControl(
-            self.history,
+            self.history_box,
             row=0,
             column=0,
-            rowspan=WINDOW_ROWS-1,
+            rowspan=WINDOW_ROWS-COMMAND_HEIGHT,
             columnspan=WINDOW_COLUMNS
         )
-        self.history.setText("Test text")
+        self.history_box.setText("Test text")
+        self.prompt = pyxbmct.Label(">>>")
+        self.placeControl(
+            self.prompt,
+            row=WINDOW_ROWS-COMMAND_HEIGHT,
+            column=0,
+            rowspan=COMMAND_HEIGHT,
+            columnspan=PROMPT_WIDTH
+        )
