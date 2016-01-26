@@ -11,8 +11,8 @@ import pyxbmct
 
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
-WINDOW_ROWS = 1
-WINDOW_COLUMNS = 1
+WINDOW_ROWS = 12
+WINDOW_COLUMNS = 16
 
 
 def start():
@@ -38,3 +38,12 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             WINDOW_ROWS,
             WINDOW_COLUMNS
         )
+        self.history = pyxbmct.TextBox()
+        self.placeControl(
+            self.history,
+            row=0,
+            column=0,
+            rowspan=WINDOW_ROWS-1,
+            columnspan=WINDOW_COLUMNS
+        )
+        self.history.setText("Test text")
