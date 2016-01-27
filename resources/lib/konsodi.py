@@ -10,6 +10,7 @@ import sys
 from cStringIO import StringIO
 import ast
 from _ast import Expr
+import xbmcgui
 import pyxbmct
 from common import *
 
@@ -63,6 +64,18 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             label="",
             focusTexture=image("up_blue.png"),
             noFocusTexture=image("up_white.png")
+        )
+        self.fake_button = pyxbmct.Button(
+            label="",
+            focusTexture="",
+            noFocusTexture=""
+        )
+        self.placeControl(
+            self.fake_button,
+            row=0,
+            column=0,
+            rowspan=WINDOW_ROWS,
+            columnspan=WINDOW_COLUMNS
         )
         self.placeControl(
             self.scroll_up_button,
@@ -262,6 +275,24 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             except Exception, e:
                 return str(e)
             return ""
+
+    def onAction(self, Action):
+        """
+        onAction event handler
+        :param Action: action object
+        :type Action: xbmcgui.Action
+        :return: None
+        """
+
+        if Action == xbmcgui.ACTION_MOUSE_WHEEL_UP:
+            self.scroll_up()
+        elif Action == xbmcgui.ACTION_MOUSE_WHEEL_DOWN:
+            self.scroll_down()
+        elif Action == xbmcgui.ACTION_SCROLL_UP:
+            self.scroll_up()
+        elif Action == xbmcgui.ACTION_SCROLL_DOWN:
+            self.scroll_down()
+        super(MainWindow, self).onAction(Action)
 
 
 def n_lines(string):
