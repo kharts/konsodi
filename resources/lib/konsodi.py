@@ -71,6 +71,18 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=1,
             columnspan=ARROW_WIDTH
         )
+        self.scroll_down_button = pyxbmct.Button(
+            label="",
+            focusTexture=image("down_blue.png"),
+            noFocusTexture=image("down_white.png")
+        )
+        self.placeControl(
+            self.scroll_down_button,
+            row = WINDOW_ROWS-COMMAND_HEIGHT-1,
+            column=WINDOW_COLUMNS-ARROW_WIDTH,
+            rowspan=1,
+            columnspan=ARROW_WIDTH
+        )
         self.prompt = pyxbmct.Label(">>>")
         self.placeControl(
             self.prompt,
