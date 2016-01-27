@@ -21,6 +21,7 @@ WINDOW_COLUMNS = 16
 COMMAND_HEIGHT = 1
 PROMPT_WIDTH = 2
 BUTTON_WIDTH = 2
+HISTORY_ROWS = 16
 
 
 def start():
@@ -56,6 +57,7 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=WINDOW_ROWS-COMMAND_HEIGHT,
             columnspan=WINDOW_COLUMNS
         )
+        self.history_shift = 0
         self.prompt = pyxbmct.Label(">>>")
         self.placeControl(
             self.prompt,
@@ -125,8 +127,25 @@ class MainWindow(pyxbmct.AddonDialogWindow):
 
         self.history += message
 
-        self.history_box.setText(self.history)
-        self.history_box.scroll(len(self.history))
+        #self.history_box.setText(self.history)
+        #self.history_box.scroll(len(self.history))
+        self.show_history()
+
+    def show_history(self):
+        """
+        Display command execution history on the history_box
+        :return: None
+        """
+
+        lines = n_lines(self.history)
+        if lines > HISTORY_ROWS:
+            self.history_shift = lines - HISTORY_ROWS
+        else:
+            self.history_shift = 0
+        all_rows = self.history.split("\n")
+        last_rows = all_rows[self.history_shift:]
+        text = "\n".join(last_rows)
+        self.history_box.setText(text)
 
     def set_streams(self):
         """
@@ -175,3 +194,15 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             except Exception, e:
                 return str(e)
             return ""
+
+
+def n_lines(string):
+    """
+    Get number of lines in a string
+    :param string: input string
+    :type string: str
+    :return: number of lines
+    :rtype: int
+    """
+
+    return len(string.split("\n"))
