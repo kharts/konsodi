@@ -22,6 +22,7 @@ COMMAND_HEIGHT = 1
 PROMPT_WIDTH = 2
 BUTTON_WIDTH = 2
 HISTORY_ROWS = 16
+ARROW_WIDTH = 1
 
 
 def start():
@@ -55,9 +56,21 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             row=0,
             column=0,
             rowspan=WINDOW_ROWS-COMMAND_HEIGHT,
-            columnspan=WINDOW_COLUMNS
+            columnspan=WINDOW_COLUMNS-ARROW_WIDTH
         )
         self.history_shift = 0
+        self.scroll_up_button = pyxbmct.Button(
+            label="",
+            focusTexture=image("up_blue.png"),
+            noFocusTexture=image("up_white.png")
+        )
+        self.placeControl(
+            self.scroll_up_button,
+            row=0,
+            column=WINDOW_COLUMNS-ARROW_WIDTH,
+            rowspan=1,
+            columnspan=ARROW_WIDTH
+        )
         self.prompt = pyxbmct.Label(">>>")
         self.placeControl(
             self.prompt,
