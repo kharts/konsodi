@@ -71,6 +71,7 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=1,
             columnspan=ARROW_WIDTH
         )
+        self.connect(self.scroll_up_button, self.scroll_up)
         self.scroll_down_button = pyxbmct.Button(
             label="",
             focusTexture=image("down_blue.png"),
@@ -83,6 +84,7 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=1,
             columnspan=ARROW_WIDTH
         )
+        self.connect(self.scroll_down_button, self.scroll_down)
         self.prompt = pyxbmct.Label(">>>")
         self.placeControl(
             self.prompt,
@@ -167,10 +169,51 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             self.history_shift = lines - HISTORY_ROWS
         else:
             self.history_shift = 0
+        self.show_shifted_history()
+
+    def show_shifted_history(self):
+        """
+        Show history textbox with shift
+        :return: None
+        """
+
         all_rows = self.history.split("\n")
         last_rows = all_rows[self.history_shift:]
         text = "\n".join(last_rows)
         self.history_box.setText(text)
+
+    def scroll_history(self, shift):
+        """
+        Scroll history
+        :param shift: num of lines (positive or negative) to scroll history
+            textbox
+        :type shift: int
+        :return: None
+        """
+
+        lines = self.history.split("\n")
+        if (self.history_shift + shift) < 0:
+            return
+        if (self.history_shift + shift) > (len(lines) - HISTORY_ROWS):
+            return
+        self.history_shift += shift
+        self.show_shifted_history()
+
+    def scroll_up(self):
+        """
+        Scroll up text in history_box
+        :return: None
+        """
+
+        self.scroll_history(-1)
+
+    def scroll_down(self):
+        """
+        Scroll down text in history_box
+        :return: None
+        """
+
+        self.scroll_history(1)
 
     def set_streams(self):
         """
