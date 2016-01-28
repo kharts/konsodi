@@ -6,7 +6,7 @@ Usually I had to use xbmc.log() function or write some small dummy addons for de
 But that all was very inconvenient, especially considering that one of the remarkable Python features is built-in interactive interpreter (or shell, or console).  
 I really missed it in Kodi. So, I decided to write one!..  
 Now, please welcome Konsodi - interactive Python console/shell. Hope it will be useful for someone.  
-![Konsodi screenshot](/../master/resouces/img/konsodi.png?raw=true)
+![Konsodi screenshot](/../master/resources/img/konsodi.png?raw=true)
 ## Usage
 Interface of Konsodi is very familiar and simple. Just text field for command input, "Run" button, and the textbox with the results.  
 You can:  
