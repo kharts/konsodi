@@ -8,7 +8,7 @@
         <provides>executable</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Python console for Kodi</summary>
+        <summary lang="en">Interactive Python console/shell for Kodi</summary>
         <description lang="en">Allows to execute arbitrary Python code and see the results inside Kodi</description>
         <disclaimer lang="en"></disclaimer>
         <language></language>
