@@ -13,6 +13,7 @@ You can:
 - Run it - using special onscreen button or pressing Enter twice (I know it would be more usual to press Enter only one time, but I didn't want to break standard Kodi features, though I could).  
 - See the results (good or not :-)) in the history textbox;  
 - Scroll the results using mouse wheel or fancy buttons.  
+  
 And that's it.  
 So, have fun!  Wish you a pleasant debugging and new awesome addons!  
 Bugreports/remarks/suggestions are welcome.  
