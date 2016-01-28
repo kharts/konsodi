@@ -32,7 +32,9 @@ def start():
     :return: None
     """
 
+    monitor = CustomMonitor()
     main_window = MainWindow("Konsodi")
+    monitor.window = main_window
     main_window.doModal()
     del main_window
 
@@ -284,6 +286,7 @@ class MainWindow(pyxbmct.AddonDialogWindow):
         :return: None
         """
 
+        debug("Action: " + str(Action.getId()))
         if Action == xbmcgui.ACTION_MOUSE_WHEEL_UP:
             self.scroll_up()
         elif Action == xbmcgui.ACTION_MOUSE_WHEEL_DOWN:
@@ -293,6 +296,25 @@ class MainWindow(pyxbmct.AddonDialogWindow):
         elif Action == xbmcgui.ACTION_SCROLL_DOWN:
             self.scroll_down()
         super(MainWindow, self).onAction(Action)
+
+
+class CustomMonitor(xbmc.Monitor):
+    """
+    Class for monitoring ControlText events
+    """
+
+    def onNotification(self, sender, method, data):
+        """
+        onNotification event handler
+        :param sender: sender of the notification
+        :param method: name of the notification
+        :param data: JSON-encoded data of the notification
+        :return: None
+        """
+
+        if sender == "xbmc":
+            if method == "Input.OnInputFinished":
+                self.window.run_command()
 
 
 def n_lines(string):
