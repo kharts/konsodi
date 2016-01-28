@@ -116,6 +116,7 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             rowspan=COMMAND_HEIGHT,
             columnspan=WINDOW_COLUMNS-PROMPT_WIDTH-BUTTON_WIDTH
         )
+        self.command_history = CommandHistory()
         self.run_button = pyxbmct.Button("Run")
         self.placeControl(
             self.run_button,
@@ -136,6 +137,7 @@ class MainWindow(pyxbmct.AddonDialogWindow):
 
         command = self.command.getText()
         debug("command: " + command)
+        self.command_history.add_command(command)
         self.add_to_history(">>> " + command)
 
         self.set_streams()
@@ -278,6 +280,27 @@ class MainWindow(pyxbmct.AddonDialogWindow):
                 return str(e)
             return ""
 
+    def command_history_up(self):
+        """
+        Move command history up (to older elements)
+        :return: None
+        """
+
+        command = self.command_history.get_previous()
+        if command:
+            self.command.setText(command)
+
+    def command_history_down(self):
+        """
+        Move command history down (to newer elements)
+        :return: None
+        """
+
+        command = self.command_history.get_next()
+        if command:
+            self.command.setText(command)
+
+
     def onAction(self, Action):
         """
         onAction event handler
@@ -295,6 +318,10 @@ class MainWindow(pyxbmct.AddonDialogWindow):
             self.scroll_up()
         elif Action == xbmcgui.ACTION_SCROLL_DOWN:
             self.scroll_down()
+        elif Action == xbmcgui.ACTION_MOVE_UP:
+            self.command_history_up()
+        elif Action == xbmcgui.ACTION_MOVE_DOWN:
+            self.command_history_down()
         super(MainWindow, self).onAction(Action)
 
 
@@ -315,6 +342,62 @@ class CustomMonitor(xbmc.Monitor):
         if sender == "xbmc":
             if method == "Input.OnInputFinished":
                 self.window.run_command()
+
+
+class CommandHistory():
+    """
+    Class for manipulating with command history
+    """
+
+    def __init__(self):
+        self.storage = []
+        self.pos = 0
+
+    def add_command(self, command):
+        """
+        Add command to the history
+        :param command: to add
+        :type command: str
+        :return: None
+        """
+
+        if command:
+            self.storage.append(command)
+            self.pos = len(self.storage)
+
+    def get_previous(self):
+        """
+        Get previous (older) command from the history
+        :return: previous command or None (if not Found)
+        :rtype: str or None
+        """
+
+        if self.storage:
+            new_pos = self.pos - 1
+            if new_pos >= 0:
+                self.pos = new_pos
+                return self.storage[self.pos]
+            else:
+                return None
+        else:
+            return None
+
+    def get_next(self):
+        """
+        Get next (newer) command from the history
+        :return: next command or None (if not Found)
+        :rtype: str or None
+        """
+
+        if self.storage:
+            new_pos = self.pos + 1
+            if new_pos < len(self.storage):
+                self.pos = new_pos
+                return self.storage[self.pos]
+            else:
+                return None
+        else:
+            return None
 
 
 def n_lines(string):
