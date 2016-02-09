@@ -15,8 +15,8 @@ import pyxbmct
 from common import *
 
 
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 480
+WINDOW_WIDTH = int(this_addon.getSetting("window_width"))
+WINDOW_HEIGHT = int(this_addon.getSetting("window_height"))
 WINDOW_ROWS = 12
 WINDOW_COLUMNS = 16
 COMMAND_HEIGHT = 1
