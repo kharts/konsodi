@@ -22,7 +22,7 @@ WINDOW_COLUMNS = 16
 COMMAND_HEIGHT = 1
 PROMPT_WIDTH = 2
 BUTTON_WIDTH = 2
-HISTORY_ROWS = 16
+HISTORY_ROWS = int(this_addon.getSetting("history_rows"))
 ARROW_WIDTH = 1
 
 
