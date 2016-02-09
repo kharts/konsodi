@@ -10,6 +10,7 @@ import sys
 from cStringIO import StringIO
 import ast
 from _ast import Expr
+import xbmc
 import xbmcgui
 import pyxbmct
 from common import *
@@ -24,6 +25,7 @@ PROMPT_WIDTH = 2
 BUTTON_WIDTH = 2
 HISTORY_ROWS = int(this_addon.getSetting("history_rows"))
 ARROW_WIDTH = 1
+RUN_COMMAND_ON_ENTER = (this_addon.getSetting("run_command_on_enter") == "true")
 
 
 def start():
@@ -342,6 +344,30 @@ class CustomMonitor(xbmc.Monitor):
         if sender == "xbmc":
             if method == "Input.OnInputFinished":
                 self.window.run_command()
+            elif method == "Input.OnInputRequested":
+                self.onInputRequested()
+
+    def onInputRequested(self):
+        """
+        Input.OnInputRequested event handler
+        :return: None
+        """
+
+        if not RUN_COMMAND_ON_ENTER:
+            return
+
+        command = self.window.command.getText()
+        if not command:
+            return
+
+        while True:
+            keyboard_visible = xbmc.getCondVisibility("Window.IsVisible(virtualkeyboard)")
+            if keyboard_visible:
+                JSONRPC("Input.Back")
+                break
+
+            if self.abortRequested():
+                break
 
 
 class CommandHistory():

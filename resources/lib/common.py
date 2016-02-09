@@ -8,6 +8,7 @@
 import xbmc
 import xbmcaddon
 import os
+import json
 
 
 this_addon = xbmcaddon.Addon()
@@ -88,6 +89,7 @@ def log(msg, level=xbmc.LOGNOTICE):
     log_message = u'{0}: {1}'.format(addonID, msg)
     xbmc.log(log_message.encode("utf-8"), level)
 
+
 def image(filename):
     """
     Construct full filename of the image, using short name
@@ -103,3 +105,32 @@ def image(filename):
                         "img",
                         filename)
 
+
+def JSONRPC(method, params={}):
+    """
+    Execute JSON-RPC method
+    :param method: name of the method. Example "Input.Back"
+    :type method: str
+    :param params: dictionary with parameter values
+    :type params: dict
+    :return: response as a string or None (in case of exception)
+    :rtype: str or None
+    """
+
+    data = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": method,
+        "params": params
+    }
+
+    command = json.dumps(data)
+
+    try:
+        response = xbmc.executeJSONRPC(command)
+    except Exception, e:
+        log_exception("Error executing JSON RPC method " + method)
+        log_exception("Params: " + str(params))
+        log_exception(str(e))
+        return None
+    return response
