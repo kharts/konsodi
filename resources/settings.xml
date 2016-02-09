@@ -4,5 +4,6 @@
         <setting id="window_width" label="30002" type="number" default="640"></setting>
         <setting id="window_height" label="30003" type="number" default="480"></setting>
         <setting id="history_rows" label="30004" type="number" default="16"></setting>
+        <setting id="run_command_on_enter" label="30005" type="bool" default="true"></setting>
     </category>
 </settings>
