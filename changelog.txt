@@ -1,2 +1,8 @@
+v0.1.2
+- Added settings:
+    * Window width;
+    * Window height;
+    * History rows;
+    * Run command on Enter
 v0.1.1
 - Initial release
