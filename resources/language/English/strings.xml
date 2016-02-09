@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <strings>
-    <string id="30001">Window width</string>
-    <string id="30002">Window height</string>
+    <string id="30001">General</string>
+    <string id="30002">Window width</string>
+    <string id="30003">Window height</string>
 </strings>
